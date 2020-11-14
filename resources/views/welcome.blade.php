@@ -35,10 +35,15 @@
                 height: 40px;
                 width: 15vw;
                 border-radius: 5px;
+                outline: none !important;
             }
 
             .btn_blue {
                 color: rgba(0,91,129,1); 
+            }
+
+            .btn_blue:hover {
+                background-color: rgba(220, 220, 220, 1); 
             }
 
             .btn_outline {
@@ -47,6 +52,11 @@
                 border-color: #fff;
                 border-style: solid;
                 border-width: 2px;
+            }
+
+            .btn_outline:hover {
+                color: rgba(220, 220, 220, 1); 
+                border-color: rgba(220, 220, 220, 1);
             }
         </style>
     </head>
