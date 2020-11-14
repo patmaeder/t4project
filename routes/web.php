@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +29,13 @@ Route::get('/', function () {
 Route::get('/home', function () {
     return view('home');
 })->middleware('auth');
+
+Route::resource('calendar', EventController::class);
+
+//Route::get('calendar', [EventController::class, "index"])->middleware('auth');
+
+//Route::get('calendar/new', function () {
+//    return view('calendar.newEvent');
+//})->middleware('auth');
+
+//Route::post('calender/new', [EventController::class, "newEvent"])->middleware('auth');
