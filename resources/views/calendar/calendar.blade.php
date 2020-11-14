@@ -12,17 +12,31 @@ th p {
 }
 
 tbody tr {
-   line-height: 70px;
-   min-height: 70px;
-   height: 70px;
+   line-height: 80px;
+   min-height: 80px;
+   height: 80px;
+}
+
+tbody td {
+    text-align: right;
+}
+
+.day {
+    vertical-align: top;
+    display: inline-block;
+    line-height: normal;
 }
 </style>
 <div class="container">
 
     <div class="d-flex justify-content-between mb-4">
-        <button type="button" class="btn btn-outline-primary glyphicon glyphicon-chevron-left"></button>
-        <h2>{{ $month }}</h2>
-        <button type="button" class="btn btn-outline-primary glyphicon glyphicon-chevron-right"></button>
+        <button type="button" class="btn btn-link" id="preceding">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <h2>&nbsp;</h2>
+        <button type="button" class="btn btn-link" id="following">
+         <i class="fas fa-chevron-right"></i>
+        </button>
     </div>
 
     <table class="table table-bordered">
@@ -39,11 +53,11 @@ tbody tr {
         </thead>
         <tbody>
 
-            @for ($i = 0; $i < 6; $i++)
+            @for ($i = 1; $i <= 6; $i++)
             <tr>
 
-                @for ($a = 0; $a < 7; $a++)
-                <td><span>{{ $a }}</span></td>
+                @for ($a = 1; $a <= 7; $a++)
+                <td><span id="cell_{{ $i }}{{ $a }}" class="day"></span></td>
                 @endfor 
 
             </tr>
@@ -55,4 +69,6 @@ tbody tr {
     <a href="{{ route('calendar.create') }}"><button type="button" class="btn btn-primary">Neuer Termin</button></a>
 
 </div>
+
+<script src="{{ asset('js/calendar.js') }}"></script>
 @endsection

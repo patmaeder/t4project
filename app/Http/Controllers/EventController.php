@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Http\Controllers\AJAXController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,18 +16,7 @@ class EventController extends Controller
      */
     public function index()
     {
-
-        $date = getdate();
-        $month = EventController::getMonthAsString($date["mon"]);
-        $days = cal_days_in_month(CAL_GREGORIAN, $date["mon"], $date["year"]);
-        $days_Array = [];
-
-        for ($i = 1; $i <= $days; $i++) {
-            
-            array_push($days_Array, $i);
-        } 
-
-        return view('calendar.calendar', ['month' => $month, 'days' => $days_Array]);
+        return view('calendar.calendar');
     }
 
     /**
@@ -147,4 +137,5 @@ class EventController extends Controller
                 break;
         }
     }
+
 }

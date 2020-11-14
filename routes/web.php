@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\AJAXController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,12 +31,7 @@ Route::get('/home', function () {
     return view('home');
 })->middleware('auth');
 
-Route::resource('calendar', EventController::class);
+Route::resource('calendar', EventController::class)->middleware('auth');
 
-//Route::get('calendar', [EventController::class, "index"])->middleware('auth');
+Route::resource('ajax', AJAXController::class)->middleware('auth');
 
-//Route::get('calendar/new', function () {
-//    return view('calendar.newEvent');
-//})->middleware('auth');
-
-//Route::post('calender/new', [EventController::class, "newEvent"])->middleware('auth');

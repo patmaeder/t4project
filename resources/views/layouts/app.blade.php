@@ -12,7 +12,8 @@
     <title>Patrick Mäder T4 Abgabe</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="https://kit.fontawesome.com/a3183a24f7.js" crossorigin="anonymous"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -35,7 +36,14 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
+                        
+                        @guest
 
+                        @else
+                        <li class="nav-item">
+                            <a class="nav-link font-weight-bold" href="{{ route('calendar.index') }}">{{ __('Kalender') }}</a>
+                        </li>
+                        @endguest
                     </ul>
 
                     <!-- Right Side Of Navbar -->
