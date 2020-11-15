@@ -19,7 +19,7 @@ class CreateEventsTable extends Migration
             $table->text('description');
             $table->date('date');
             $table->time('time');
-            $table->string('username');
+            $table->integer('userID');
             $table->timestamps();
         });
     }

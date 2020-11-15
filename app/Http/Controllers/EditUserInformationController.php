@@ -73,15 +73,11 @@ class EditUserInformationController extends Controller
      */
     public function destroy($id)
     {
-        $Events = DB::select("select * from homestead.events where userID = '".$id."'", [1]);
-
-        foreach($Events as $event) {
-            $event->delete();
-        }
+        $Events = DB::delete("delete from homestead.events where userID = '".$id."';");
 
         $user= User::findOrFail($id);
         $user->delete();
 
-        return redirect('/welcome');
+        return redirect('/');
     }
 }

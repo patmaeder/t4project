@@ -93,12 +93,11 @@ class AJAXController extends Controller
         $lastDay->setTimestamp($firstDay->getTimestamp() + 86400*$days -86400);
 
         //Selecting Events for specific User 
-        $sessionID = session()->getID();
-        $user = DB::select("select username from homestead.users JOIN homestead.sessions on (users.id = user_id) where sessions.id = '".$sessionID."'", [1]);
+        $user = auth()->user();
 
-        $events = DB::select("select * from homestead.events where username = '".$user["0"]->username."' and date between '".$firstDay->format('Y-m-d')."' and '".$lastDay->format('Y-m-d')."' order by date, time;", [1]);
+        $events = DB::select("select * from homestead.events where userID = '".$user->id."' and date between '".$firstDay->format('Y-m-d')."' and '".$lastDay->format('Y-m-d')."' order by date, time;", [1]);
 
-        $response = ["date" => $date->format('d.m.Y'), "firstDay" => $firstDay->format('d.m.Y'), "lastDay" => $lastDay->format('d.m.Y'), "month" => $monthAsString, "days" => $days, "firstWeekday" => $firstDay->format("N"), "lastDat" => $lastDay->format("d"), "events" => $events];
+        $response = ["month" => $monthAsString, "days" => $days, "firstWeekday" => $firstDay->format("N"), "lastDat" => $lastDay->format("d"), "events" => $events];
 
         return $response;
     }

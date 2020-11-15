@@ -34,7 +34,7 @@
 
                                 @error('username')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                        <strong>This username yet exists</strong>
                                     </span>
                                 @enderror
                             </div>
@@ -48,7 +48,7 @@
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                        <strong>This email address already has an account</strong>
                                     </span>
                                 @enderror
                             </div>

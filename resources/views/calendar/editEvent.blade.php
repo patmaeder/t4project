@@ -80,8 +80,7 @@
                             </div>
                         </div>
                     </form>
-                    <p>&nbsp</p>
-                    <form action="{{ route('calendar.destroy', $event->id) }}" method="POST">
+                    <form action="{{ route('calendar.destroy', $event->id) }}" method="POST" class="mt-4">
                         @csrf
                         @method('DELETE')
                         <div class="form-group row mb-0">

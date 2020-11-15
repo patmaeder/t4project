@@ -46,7 +46,7 @@ class EventController extends Controller
         ]);
 
         $user = auth()->user();
-        $data["username"] = $user->username;
+        $data["userID"] = $user->id;
 
         Event::create($data);
 
@@ -76,13 +76,13 @@ class EventController extends Controller
 
         $user = auth()->user();
 
-        if($event->username == $$user->username) {
+        if($event->userID == $user->id) {
 
             return view('calendar.editEvent', ['event' => $event]);
 
         }else {
 
-            return redirect('/calendar')->with('error', 'Dieser Kalendereintrag existiert nicht');
+            return redirect('/calendar')->with('error', 'Dieser Kalendereintrag konnte nicht zu Ihrem Account zugeordnet werden');
         }
     }
 
@@ -116,9 +116,19 @@ class EventController extends Controller
     public function destroy($id)
     {
         $event= Event::findOrFail($id);
-        $event->delete();
 
-        return redirect('/calendar')->with('success', 'Eintrag wurde erfolgreich gelöscht');
+        $user = auth()->user();
+
+        if($event->userID == $user->id) {
+
+            $event->delete();
+            return redirect('/calendar')->with('success', 'Eintrag wurde erfolgreich gelöscht');
+
+        }else {
+
+            return redirect('/calendar')->with('error', 'Dieser Kalendereintrag konnte nicht zu Ihrem Account zugeordnet werden');
+        }
+
     }
 
     public function getMonthAsString($month) {
