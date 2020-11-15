@@ -6,9 +6,10 @@ use App\Models\Event;
 use App\Http\Controllers\AJAXController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
-{
+{    
     /**
      * Display a listing of the resource.
      *
@@ -44,10 +45,14 @@ class EventController extends Controller
             'description' => ['string'],
         ]);
 
+        $sessionID = session()->getID();
+
+        $username = DB::select("select username from homestead.users JOIN homestead.sessions on (users.id = user_id) where sessions.id = '".$sessionID."'", [1]);
+        $data["username"] = $username["0"]->username;
+
         Event::create($data);
 
-        return redirect('/calendar')->with('sucess', 'Eintrag wurde erfolgreich angelegt');
-        
+        return redirect('/calendar')->with('success', 'Eintrag wurde erfolgreich angelegt');
     }
 
     /**

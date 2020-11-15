@@ -14,20 +14,43 @@ th p {
 tbody tr {
    line-height: 80px;
    min-height: 80px;
+   max-height: 80px;
    height: 80px;
 }
 
-tbody td {
+.day {
     text-align: right;
+    vertical-align: top;
 }
 
-.day {
+.day p {
     vertical-align: top;
     display: inline-block;
     line-height: normal;
 }
+
+.event {
+    background-color: #005a81;
+    display: flex;
+    border-radius: 5px;
+    padding: 3px;
+    margin-top: 5px;
+}
+
+.event p {
+    text-align:left;
+    line-height: normal;
+    margin: 2px;
+    color: #fff;
+}
 </style>
 <div class="container">
+
+    @if(session()->get('success'))
+    <div class="alert alert-success">
+        {{session()->get('success')}}
+    </div>
+    @endif
 
     <div class="d-flex justify-content-between mb-4">
         <button type="button" class="btn btn-link" id="preceding">
@@ -57,7 +80,7 @@ tbody td {
             <tr>
 
                 @for ($a = 1; $a <= 7; $a++)
-                <td><span id="cell_{{ $i }}{{ $a }}" class="day"></span></td>
+                <td class="day"><span>&nbsp</span></td>
                 @endfor 
 
             </tr>

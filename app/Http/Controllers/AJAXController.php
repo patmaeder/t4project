@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class AJAXController extends Controller
@@ -86,9 +87,18 @@ class AJAXController extends Controller
         $monthAsString = $this->getMonthAsString($month)." ".$year;
 
         $firstDay = new \DateTime;
-        $firstDay->setTimestamp($date->getTimestamp()-(86400*($day-1)));
+        $firstDay->setTimestamp($date->getTimestamp() - 86400*$day +86400);
 
-        $response = ["month" => $monthAsString, "days" => $days, "firstWeekday" => $firstDay->format("N")];
+        $lastDay = new \DateTime;
+        $lastDay->setTimestamp($firstDay->getTimestamp() + 86400*$days -86400);
+
+        //Selecting Events for specific User 
+        $sessionID = session()->getID();
+        $user = DB::select("select username from homestead.users JOIN homestead.sessions on (users.id = user_id) where sessions.id = '".$sessionID."'", [1]);
+
+        $events = DB::select("select * from homestead.events where username = '".$user["0"]->username."' and date between '".$firstDay->format('Y-m-d')."' and '".$lastDay->format('Y-m-d')."' order by date, time;", [1]);
+
+        $response = ["date" => $date->format('d.m.Y'), "firstDay" => $firstDay->format('d.m.Y'), "lastDay" => $lastDay->format('d.m.Y'), "month" => $monthAsString, "days" => $days, "firstWeekday" => $firstDay->format("N"), "lastDat" => $lastDay->format("d"), "events" => $events];
 
         return $response;
     }
