@@ -57,9 +57,14 @@ function AJAXRequest(request) {
                 i++;
             }
 
-            for (item of response["events"]) {
+            for (item of response.events) {
 
                 let day = item['date'].slice(8);
+                
+                if (day.startsWith('0')) {
+                
+                    day = day.slice(1);
+                }
 
                 let updatedlist = document.querySelectorAll(".day");
 
