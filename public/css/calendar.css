@@ -1,0 +1,41 @@
+th {
+    width: calc(100% / 7);
+}
+
+th p {
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.day {
+    text-align: right;
+    vertical-align: top;
+}
+
+.cell_wrapper {
+    display: flex;
+    min-height: 80px;
+    flex-direction: column;
+}
+
+.day p {
+    vertical-align: top;
+    display: inline-block;
+    line-height: normal;
+    margin-bottom: 0;
+}
+
+.event {
+    background-color: #005a81;
+    display: grid;
+    border-radius: 5px;
+    padding: 3px;
+    margin-top: 5px;
+}
+
+.event p {
+    text-align:left;
+    line-height: normal;
+    margin: 2px;
+    color: #fff;
+}
