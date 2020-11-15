@@ -1,7 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+
+    <div class="container">
+
+    @if(session()->get('success'))
+    <div class="alert alert-success">
+        {{session()->get('success')}}
+    </div>
+    @endif
+
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -20,4 +28,20 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function() {
+
+    try {
+
+        let alert = document.querySelector('.alert');
+
+        setTimeout(() => {
+            alert.style.display = "none";
+        }, 4000);
+        
+    } catch (e) {
+
+    }
+});
+</script>
 @endsection
