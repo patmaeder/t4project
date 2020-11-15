@@ -45,10 +45,8 @@ class EventController extends Controller
             'description' => [],
         ]);
 
-        $sessionID = session()->getID();
-
-        $username = DB::select("select username from homestead.users JOIN homestead.sessions on (users.id = user_id) where sessions.id = '".$sessionID."'", [1]);
-        $data["username"] = $username["0"]->username;
+        $user = auth()->user();
+        $data["username"] = $user->username;
 
         Event::create($data);
 
@@ -74,15 +72,11 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        //$event = DB::select("select * from homestead.events where id = '".$id."';", [1]);
-
         $event= Event::findOrFail($id);
 
-        $sessionID = session()->getID();
-        $user = DB::select("select username from homestead.users JOIN homestead.sessions on (users.id = user_id) where sessions.id = '".$sessionID."'", [1]);
-        $username = $user["0"]->username;
+        $user = auth()->user();
 
-        if($event->username == $username) {
+        if($event->username == $$user->username) {
 
             return view('calendar.editEvent', ['event' => $event]);
 

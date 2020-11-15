@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\AJAXController;
+use App\Http\Controllers\EditUserInformationController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +36,6 @@ Route::get('/home', function () {
 Route::resource('calendar', EventController::class)->middleware('auth');
 
 Route::resource('ajax', AJAXController::class)->middleware('auth');
+
+Route::resource('edit', EditUserInformationController::class)->middleware('auth');
 
