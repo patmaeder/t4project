@@ -42,7 +42,7 @@ class EventController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'date' => ['required', 'date'],
             'time' => ['required', 'string'],
-            'description' => ['string'],
+            'description' => [],
         ]);
 
         $sessionID = session()->getID();
@@ -74,7 +74,11 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        //
+        //$event = DB::select("select * from homestead.events where id = '".$id."';", [1]);
+
+        $event= Event::findOrFail($id);
+
+        return view('calendar.editEvent', ['event' => $event]);
     }
 
     /**
@@ -86,7 +90,16 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'date' => ['required', 'date'],
+            'time' => ['required', 'string'],
+            'description' => [],
+        ]);
+
+        Event::where('id', $id)->update($data);
+
+        return redirect('/calendar')->with('success', 'Eintrag wurde erfolgreich bearbeitet');
     }
 
     /**

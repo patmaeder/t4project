@@ -66,7 +66,7 @@ function AJAXRequest(request) {
                 for (cell of updatedlist) {
 
                     if (cell.querySelector("p").textContent == day) {
-                        cell.innerHTML = cell.innerHTML + "<a href = 'calendar/create' class='event'><p>"+item['time'].slice(0,5)+"</p><p>"+item['title']+"</p></a>";
+                        cell.innerHTML = cell.innerHTML + "<a href = 'calendar/" + item['id'] + "/edit' class='event'><p>"+item['time'].slice(0,5)+"</p><p>"+item['title']+"</p></a>";
                     }
 
                 }
