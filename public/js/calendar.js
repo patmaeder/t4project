@@ -7,10 +7,10 @@ $(document).ready(function() {
 
         setTimeout(() => {
             alert.style.display = "none";
-        }, 3500);
+        }, 4000);
         
-    } catch (error) {
-        
+    } catch (e) {
+
     }
 
 });
@@ -47,7 +47,7 @@ function AJAXRequest(request) {
 
             for (item of list) {
 
-                item.innerHTML = "<p>&nbsp</p>";
+                item.innerHTML = '<div class="cell_wrapper"><p>&nbsp</p></div>';
 
                 if (i >= response.firstWeekday -1 && i <= count) {
                     item.querySelector("p").innerHTML = day;
@@ -66,7 +66,7 @@ function AJAXRequest(request) {
                 for (cell of updatedlist) {
 
                     if (cell.querySelector("p").textContent == day) {
-                        cell.innerHTML = cell.innerHTML + "<a href = 'calendar/" + item['id'] + "/edit' class='event'><p>"+item['time'].slice(0,5)+"</p><p>"+item['title']+"</p></a>";
+                        cell.querySelector(".cell_wrapper").innerHTML = cell.querySelector(".cell_wrapper").innerHTML + "<a href = 'calendar/" + item['id'] + "/edit' class='event'><p>"+item['time'].slice(0,5)+"</p><p>"+item['title']+"</p></a>";
                     }
 
                 }

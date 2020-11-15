@@ -78,7 +78,18 @@ class EventController extends Controller
 
         $event= Event::findOrFail($id);
 
-        return view('calendar.editEvent', ['event' => $event]);
+        $sessionID = session()->getID();
+        $user = DB::select("select username from homestead.users JOIN homestead.sessions on (users.id = user_id) where sessions.id = '".$sessionID."'", [1]);
+        $username = $user["0"]->username;
+
+        if($event->username == $username) {
+
+            return view('calendar.editEvent', ['event' => $event]);
+
+        }else {
+
+            return redirect('/calendar')->with('error', 'Dieser Kalendereintrag existiert nicht');
+        }
     }
 
     /**
@@ -110,7 +121,10 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $event= Event::findOrFail($id);
+        $event->delete();
+
+        return redirect('/calendar')->with('success', 'Eintrag wurde erfolgreich gelöscht');
     }
 
     public function getMonthAsString($month) {

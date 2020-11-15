@@ -11,27 +11,27 @@ th p {
     margin-bottom: 0;
 }
 
-tbody tr {
-   line-height: 80px;
-   min-height: 80px;
-   max-height: 80px;
-   height: 80px;
-}
-
 .day {
     text-align: right;
     vertical-align: top;
+}
+
+.cell_wrapper {
+    display: flex;
+    min-height: 80px;
+    flex-direction: column;
 }
 
 .day p {
     vertical-align: top;
     display: inline-block;
     line-height: normal;
+    margin-bottom: 0;
 }
 
 .event {
     background-color: #005a81;
-    display: flex;
+    display: grid;
     border-radius: 5px;
     padding: 3px;
     margin-top: 5px;
@@ -49,6 +49,10 @@ tbody tr {
     @if(session()->get('success'))
     <div class="alert alert-success">
         {{session()->get('success')}}
+    </div>
+    @elseif(session()->get('error'))
+    <div class="alert alert-danger">
+        {{session()->get('error')}}
     </div>
     @endif
 
@@ -80,7 +84,7 @@ tbody tr {
             <tr>
 
                 @for ($a = 1; $a <= 7; $a++)
-                <td class="day"><span>&nbsp</span></td>
+                <td class="day"><div class="cell_wrapper"><span>&nbsp</span></div></td>
                 @endfor 
 
             </tr>
