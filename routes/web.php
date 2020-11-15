@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\AJAXController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +30,8 @@ Route::get('/', function () {
 Route::get('/home', function () {
     return view('home');
 })->middleware('auth');
+
+Route::resource('calendar', EventController::class)->middleware('auth');
+
+Route::resource('ajax', AJAXController::class)->middleware('auth');
+
