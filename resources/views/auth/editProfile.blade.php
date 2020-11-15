@@ -62,6 +62,16 @@
                             </div>
                         </div>
                     </form>
+                    <form action="{{ route('edit.destroy', $user->id) }}" method="POST" class="mt-4">
+                        @csrf
+                        @method('DELETE')
+                        <div class="form-group row mb-0">
+                            <div class="col-6 offset-md-4">
+                                <button type="submit" class="btn btn-outline-primary">Account löschen</button>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>

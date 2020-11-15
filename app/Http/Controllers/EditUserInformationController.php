@@ -64,4 +64,24 @@ class EditUserInformationController extends Controller
 
         return redirect('/home')->with('success', 'Profil wurde erfolgreich bearbeitet');
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $Events = DB::select("select * from homestead.events where userID = '".$id."'", [1]);
+
+        foreach($Events as $event) {
+            $event->delete();
+        }
+
+        $user= User::findOrFail($id);
+        $user->delete();
+
+        return redirect('/welcome');
+    }
 }
