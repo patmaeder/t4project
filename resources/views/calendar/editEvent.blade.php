@@ -76,13 +76,17 @@
                                     {{ __('Aktualisieren') }}
                                 </button>
 
-                                <form action="{{ route('calendar.destroy', $event->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit" class="btn btn-primary">Eintrag löschen</button>
-                                </form>
                                 <a href="{{ route('calendar.index') }}"><button type="button" class="btn btn-outline-primary">Zurück</button></a>
+                            </div>
+                        </div>
+                    </form>
+                    <p>&nbsp</p>
+                    <form action="{{ route('calendar.destroy', $event->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <div class="form-group row mb-0">
+                            <div class="col-6 offset-md-4">
+                                <button type="submit" class="btn btn-primary">Eintrag löschen</button>
                             </div>
                         </div>
                     </form>
