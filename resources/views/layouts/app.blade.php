@@ -43,6 +43,9 @@
                         <li class="nav-item">
                             <a class="nav-link font-weight-bold" href="{{ route('calendar.index') }}">{{ __('Kalender') }}</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link font-weight-bold" href="{{ route('grades.index') }}">{{ __('Notenübersicht') }}</a>
+                        </li>
                         @endguest
                     </ul>
 
