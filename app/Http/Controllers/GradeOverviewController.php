@@ -17,7 +17,45 @@ class GradeOverviewController extends Controller
      */
     public function index()
     {
-        $semester = [1 => ['Mathematik' => ['grade' => 1.5, 'ECTS' => 5], 'Deutsch' => ['grade' => 2, 'ECTS' => 4]], 2 => ['BK' => ['grade' => 1.5, 'ECTS' => 5]]];
+        $user = auth()->user();
+        
+        $result = DB::select("select * from homestead.grades where userID = '".$user->id."' order by semester", [1]);
+
+        $semester = [];
+        $count = 0;
+
+        foreach ($result as $item) {
+          
+            $s = 'array'.$item->semester;
+
+            if (isset($$s)) {
+
+                array_push($$s, [$item->subject => ['grade' => $item->grade, 'ECTS' => $item->ECTS, 'id' => $item->id]]);
+
+
+            } else {
+
+                global $$s;
+                $$s = [];
+                array_push($$s, [$item->subject => ['grade' => $item->grade, 'ECTS' => $item->ECTS, 'id' => $item->id]]);
+                $count++;
+            }
+
+        };
+
+        if ($count != 0) {
+
+            for ($i = 1; $i <= $count; $i++) {
+            
+                $arrayName = 'array'.$i;
+    
+                $semester[$i] = $$arrayName;
+            }
+
+        } else {
+
+            $semester[1] = [];
+        }
 
         return view('gradeOverview.gradeOverview', ['semesters' => $semester]);
     }
@@ -51,6 +89,10 @@ class GradeOverviewController extends Controller
         $data["userID"] = $user->id;
 
         Grade::create($data);
+
+        $id = DB::getPdo()->lastInsertId();;
+
+        return response()->json(['id' => $id]);
     }
 
     /**

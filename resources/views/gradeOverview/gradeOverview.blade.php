@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+.color {
+    color: #555;
+}
+</style>
 <div class="container">
     <div class="accordion" id="accordionExample">
 
@@ -22,18 +27,33 @@
                                 <th class="border-top-0 " style="width: 50%" >Fach</th>
                                 <th class="border-top-0">Note</th>
                                 <th class="border-top-0">ECTS</th>
+                                <th class="border-top-0" style="width:5%"></th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            @foreach ($semester as $Fach => $Grades)
-                            <tr>
-                                <td>{{ $Fach }}</td>
-                                <td>{{ $Grades['grade'] }}</td>
-                                <td>{{ $Grades['ECTS'] }}</td>
-                            </tr>
+                            @foreach ($semester as $Index)
+                                @foreach ($Index as $Fach => $Grades)
+                                <tr>
+                                    <td>{{ $Fach }}</td>
+                                    <td>{{ $Grades['grade'] }}</td>
+                                    <td>{{ $Grades['ECTS'] }}</td>
+                                    <td>
+                                        <form action="{{ route('grades.destroy', $Grades['id']) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                            <div class="form-group row mb-0">
+                                                <div>
+                                                    <button type="submit" class="btn btn-sm"><i class="fas fa-times color"></i></button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endforeach
                             @endforeach
                             <tr class="divider">
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -42,6 +62,7 @@
                                 <td class="border-top-0">&nbsp</td>
                                 <td class="border-top-0" id='avg'></td>
                                 <td class="border-top-0" id='ECTS'></td>
+                                <td class="border-top-0"></td>
                             </tr>
                         </tbody>
                     </table>

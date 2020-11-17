@@ -8,7 +8,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!--<title>{{ config('app.name', 'Patrick Mäder T4 Abgabe') }}</title>-->
-
     <title>Patrick Mäder T4 Abgabe</title>
 
     <!-- Scripts -->

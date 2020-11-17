@@ -1,5 +1,14 @@
-$('.collapse').collapse();
+$(document).ready(function() {
+    
+    $('.collapse').collapse();
 
+    //calculateSummary();
+});
+
+/*function calculateSummary() {
+
+    document.querySelector("");
+};*/
 
 function createNewSemester() {
 
@@ -28,10 +37,12 @@ function createNewSemester() {
                                             <th class="border-top-0 " style="width: 50%" >Fach</th>
                                             <th class="border-top-0">Note</th>
                                             <th class="border-top-0">ECTS</th>
+                                            <th class="border-top-0"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="divider">
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -40,6 +51,7 @@ function createNewSemester() {
                                             <td class="border-top-0">&nbsp</td>
                                             <td class="border-top-0" id='avg'></td>
                                             <td class="border-top-0" id='ECTS'></td>
+                                            <td class="border-top-0"></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -54,7 +66,7 @@ function createNewSemester() {
 
 function showInput() {
 
-    let Input = document.querySelectorAll("input");
+    let Input = document.querySelector("#InputRow");
 
     let id = event.target.getAttribute("id") + "-s";
 
@@ -62,9 +74,10 @@ function showInput() {
                             <td><input type="text" class="form-control" id="InputSubject" aria-describedby="Input Fach" placeholder="Fach"></td>
                             <td><input type="text" class="form-control" id="InputGrade" aria-describedby="Input Note" placeholder="Note"><div class="invalid-feedback">Eingabe muss eine Zahl sein</div></td>
                             <td><input type="text" class="form-control" id="InputECTS" aria-describedby="Input ECTS" placeholder="ECTS"><div class="invalid-feedback">Eingabe muss eine Zahl sein</div></td>
+                            <td></td>
                         </tr>`;
 
-    if(Input.length == 1) {
+    if(Input == null) {
                 
         let element = event.target.parentNode.querySelector(".divider");
         element.insertAdjacentHTML("beforebegin", Inputfields);
@@ -151,10 +164,21 @@ function sendCreateRequest(event) {
             
             let semester = parseInt(document.querySelector('#InputRow').getAttribute("semester"));
 
-            let newRow = `<tr>
+            let newRow = `<tr id="newRow">
                             <td>`+SubjectInput+`</td>
                             <td>`+GradeInput+`</td>
                             <td>`+ECTSInput+`</td>
+                            <td>
+                                <form method="POST">
+                                    <input type="hidden" name="_token" value="HL0Sf3iD1W0OFvBGxEeuRrHpeo2x1GIjgUAXp4Qx">                                        
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <div class="form-group row mb-0">
+                                        <div>
+                                            <button type="submit" class="btn btn-sm"><i class="fas fa-times color"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </td>
                         </tr>`;
             
             document.querySelector('#InputRow').insertAdjacentHTML("beforebegin", newRow);
@@ -177,7 +201,9 @@ function sendCreateRequest(event) {
                 data: RequestBody,
         
                 success: function(response) {
-                    console.log(response);
+                    
+                    document.querySelector("#newRow").querySelector("form").setAttribute("action", "http://application.test:8000/grades/"+response.id);
+                    document.querySelector("#newRow").removeAttribute("id");
                 }
             });
 
