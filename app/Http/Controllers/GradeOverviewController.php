@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Grade;
 use Illuminate\Http\Request;
+use App\Http\Controllers\AJAXController;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class GradeOverviewController extends Controller
 {
@@ -36,7 +40,17 @@ class GradeOverviewController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'semester' => ['numeric'],
+            'subject' => ['string'],
+            'grade' => ['numeric'],
+            'ECTS' => ['numeric'],
+        ]);
+
+        $user = auth()->user();
+        $data["userID"] = $user->id;
+
+        Grade::create($data);
     }
 
     /**

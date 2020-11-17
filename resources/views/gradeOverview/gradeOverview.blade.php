@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-header" id="heading{{ $key }}">
                 <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse{{ $key }}" aria-expanded="true" aria-controls="collapse{{ $key }}">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse{{ $key }}" aria-expanded="true" aria-controls="collapse{{ $key }}" onclick="hideInput()">
                     {{ $key }}. Semester
                     </button>
                 </h2>
@@ -33,25 +33,26 @@
                                 <td>{{ $Grades['ECTS'] }}</td>
                             </tr>
                             @endforeach
-                            <tr>
+                            <tr class="divider">
                                 <td></td>
                                 <td></td>
                                 <td></td>
                             </tr>
-                            <tr class='table-secondary'>
+                            <tr class='summary'>
                                 <td class="border-top-0">&nbsp</td>
                                 <td class="border-top-0" id='avg'></td>
                                 <td class="border-top-0" id='ECTS'></td>
                             </tr>
                         </tbody>
                     </table>
+                    <button type="button" class="btn btn-primary mt-3" id="{{ $key }}" onclick="showInput()">Neues Fach hinzufügen</button>
                 </div>
             </div>
         </div>
         @endforeach
 
     </div>
-    <button type="button" class="btn btn-primary mt-3" id="addSemester">Semester hinzufügen</button>
+    <button type="button" class="btn btn-primary mt-3" id="addSemester" onclick="createNewSemester()">Semester hinzufügen</button>
 </div>
 
 <script src="{{ asset('js/gradeOverview.js') }}"></script>

@@ -16,9 +16,9 @@ class CreateGradesTable extends Migration
         Schema::create('grades', function (Blueprint $table) {
             $table->id();
             $table->integer('semester');
-            $table->string('subject');
-            $table->double('grade', 3, 2);
-            $table->integer('ETCS');
+            $table->string('subject')->nullable();;
+            $table->double('grade', 3, 2)->nullable();;
+            $table->integer('ECTS')->nullable();;
             $table->integer('userID');
             $table->timestamps();
         });
