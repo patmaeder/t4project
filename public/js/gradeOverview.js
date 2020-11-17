@@ -2,13 +2,49 @@ $(document).ready(function() {
     
     $('.collapse').collapse();
 
-    //calculateSummary();
+    calculateSummary();
 });
 
-/*function calculateSummary() {
+function calculateSummary() {
 
-    document.querySelector("");
-};*/
+    let tables = document.querySelectorAll("table");
+
+    tables.forEach((table) => {
+
+        let grades = table.querySelectorAll(".grade");
+
+        let avg = 0;
+
+        for (var i = 0; i < grades.length; i++) {
+            
+            if (grades[i].innerHTML != "") {
+
+                avg = avg + parseFloat(grades[i].innerHTML);
+                console.log(grades[i].innerHTML);
+                console.log(avg);
+            }
+        }
+
+        avg = (avg/grades.length).toFixed(2);
+        table.querySelector("#avg").innerHTML = "<b>&Oslash; "+avg+"</b>";
+
+        let ects = table.querySelectorAll(".ects");
+
+        let sum = 0;
+
+        for (var i = 0; i < ects.length; i++) {
+            
+            if (ects[i].innerHTML != "") {
+
+                sum = sum + parseInt(ects[i].innerHTML);
+                console.log(ects[i].innerHTML);
+                console.log(sum);
+            }
+        }
+
+        table.querySelector("#ECTS").innerHTML = "<b>"+sum+"</b>";
+    })
+};
 
 function createNewSemester() {
 
@@ -194,8 +230,8 @@ function sendCreateRequest(event) {
 
             let newRow = `<tr id="newRow">
                             <td>`+SubjectInput+`</td>
-                            <td>`+GradeInput+`</td>
-                            <td>`+ECTSInput+`</td>
+                            <td class="grade" >`+GradeInput+`</td>
+                            <td class="ects" >`+ECTSInput+`</td>
                             <td>
                                 <form method="POST">
                                     <input type="hidden" name="_token" value="HL0Sf3iD1W0OFvBGxEeuRrHpeo2x1GIjgUAXp4Qx">                                        
@@ -233,6 +269,7 @@ function sendCreateRequest(event) {
                 }
             });
 
+            calculateSummary();
         }
     }
 };

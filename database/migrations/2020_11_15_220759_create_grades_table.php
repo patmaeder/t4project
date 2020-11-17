@@ -17,7 +17,7 @@ class CreateGradesTable extends Migration
             $table->id();
             $table->integer('semester');
             $table->string('subject')->nullable();;
-            $table->double('grade', 3, 2)->nullable();;
+            $table->double('grade', 5, 2)->nullable();;
             $table->integer('ECTS')->nullable();;
             $table->integer('userID');
             $table->timestamps();

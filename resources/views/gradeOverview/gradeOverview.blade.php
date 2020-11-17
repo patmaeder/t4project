@@ -25,9 +25,9 @@
                         <thead>
                             <tr>
                                 <th class="border-top-0 " style="width: 50%" >Fach</th>
-                                <th class="border-top-0">Note</th>
-                                <th class="border-top-0">ECTS</th>
-                                <th class="border-top-0" style="width:5%"></th>
+                                <th class="border-top-0" style="width: 23%" >Note</th>
+                                <th class="border-top-0" style="width: 23%">ECTS</th>
+                                <th class="border-top-0" style="width:4%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -36,8 +36,8 @@
                                 @foreach ($Index as $Fach => $Grades)
                                 <tr>
                                     <td>{{ $Fach }}</td>
-                                    <td>{{ $Grades['grade'] }}</td>
-                                    <td>{{ $Grades['ECTS'] }}</td>
+                                    <td class="grade">{{ $Grades['grade'] }}</td>
+                                    <td class="ects">{{ $Grades['ECTS'] }}</td>
                                     <td>
                                         <form action="{{ route('grades.destroy', $Grades['id']) }}" method="POST">
                                         @csrf
