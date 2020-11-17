@@ -20,8 +20,6 @@ function calculateSummary() {
             if (grades[i].innerHTML != "") {
 
                 avg = avg + parseFloat(grades[i].innerHTML);
-                console.log(grades[i].innerHTML);
-                console.log(avg);
             }
         }
 
@@ -37,8 +35,6 @@ function calculateSummary() {
             if (ects[i].innerHTML != "") {
 
                 sum = sum + parseInt(ects[i].innerHTML);
-                console.log(ects[i].innerHTML);
-                console.log(sum);
             }
         }
 
@@ -91,7 +87,7 @@ function createNewSemester() {
                                         </tr>
                                     </tbody>
                                 </table>
-                                <button type="button" class="btn btn-primary mt-3" id="`+id+`" onclick="showInput()" >Neues Fach hinzufügen</button>
+                                <button type="button" class="btn btn-primary mt-3" id="`+id+`" onclick="createNewSubject()" >Neues Fach hinzufügen</button>
                             </div>
                         </div>
                     </div>`
@@ -100,28 +96,25 @@ function createNewSemester() {
     accordion.innerHTML = accordion.innerHTML + template;
 };
 
-function showInput() {
+function showInput(ph_Subject, ph_Grade, ph_ECTS, InserElement) {
 
     let Input = document.querySelector("#InputRow");
 
     let id = event.target.getAttribute("id") + "-s";
 
     let Inputfields = `<tr id="InputRow" semester="`+id+`">
-                            <td><input type="text" class="form-control" id="InputSubject" aria-describedby="Input Fach" placeholder="Fach"><div class="invalid-feedback">Dieses Feld ist erforderlich</div></td>
-                            <td><input type="text" class="form-control" id="InputGrade" aria-describedby="Input Note" placeholder="Note"><div class="invalid-feedback">Eingabe muss eine Zahl sein</div></td>
-                            <td><input type="text" class="form-control" id="InputECTS" aria-describedby="Input ECTS" placeholder="ECTS"><div class="invalid-feedback">Eingabe muss eine ganzzahlige Zahl sein</div></td>
+                            <td><input type="text" class="form-control" id="InputSubject" aria-describedby="Input Fach" placeholder="Fach" value="`+ph_Subject+`"><div class="invalid-feedback">Dieses Feld ist erforderlich</div></td>
+                            <td><input type="text" class="form-control" id="InputGrade" aria-describedby="Input Note" placeholder="Note" value="`+ph_Grade+`"><div class="invalid-feedback">Eingabe muss eine Zahl sein</div></td>
+                            <td><input type="text" class="form-control" id="InputECTS" aria-describedby="Input ECTS" placeholder="ECTS" value="`+ph_ECTS+`"><div class="invalid-feedback">Eingabe muss eine ganzzahlige Zahl sein</div></td>
                             <td></td>
                         </tr>`;
 
     if(Input == null) {
                 
-        let element = event.target.parentNode.querySelector(".divider");
-        element.insertAdjacentHTML("beforebegin", Inputfields);
+        InserElement.insertAdjacentHTML("beforebegin", Inputfields);
 
         document.querySelector("#InputSubject").focus();
         document.querySelector("#InputSubject").select();
-    
-        document.addEventListener("keypress", sendCreateRequest);
     }
 }
 
@@ -137,139 +130,242 @@ function hideInput() {
 
 }
 
+function removeEevntListener() { document.removeEventListener("keypress", awaitEnter);};
 
-function sendCreateRequest(event) {
+function createNewSubject() {
 
-    if (event.keyCode == 13) {
+    let element = event.target.parentNode.querySelector(".divider");
+
+    showInput("", "", "", element);
     
-        let SubjectInput;
-        let SubjectBool = 0;
-        let GradeInput;
-        let GradeBool = 0;
-        let ECTSInput;
-        let ECTSBool = 0;
-    
-        try {
-            SubjectInput = document.querySelector('#InputSubject').value; 
-        
-            if (SubjectInput == ""){
+    document.addEventListener("keypress", awaitEnter = (event) => {
 
-                SubjectBool = 0;
-                document.querySelector("#InputSubject").nextSibling.style.display = "block";
+        if (event.keyCode == 13) {
 
-            } else {
+            let response = validateInput();
 
-                SubjectBool = 2;
-                document.querySelector("#InputGrade").nextSibling.style.display = "none";
-            }
+            if (response == 0) {
 
-        }catch (e) {
+                removeEevntListener();
+                document.querySelector('#InputRow').parentNode.removeChild(document.querySelector('#InputRow'));
 
-            document.querySelector("#InputGrade").nextSibling.style.display = "block";
-        };
-
-        try {
-            GradeInput = document.querySelector('#InputGrade').value; 
-                   
-            if (GradeInput == ""){
-            
-                GradeBool = 0;
-
-            } else if (isNaN(GradeInput)) {
-
-                GradeBool = 1;
-                document.querySelector("#InputGrade").nextSibling.style.display = "block";
-
-            } else if (Number.isFloat(parseFloat(GradeInput))) {
-
-                GradeBool = 2;
-                document.querySelector("#InputGrade").nextSibling.style.display = "none";
-
-            } else {
-
-                GradeBool = 1;
-            }
-        
-        }catch (e) {};
-
-        try {
-            ECTSInput = document.querySelector('#InputECTS').value; 
-        
-            if (ECTSInput == ""){
-
-                ECTSBool = 0;
+            } else if (response == 2) {
                 
-            } else if (isNaN(ECTSInput)) {
-
-                ECTSBool = 1;
-                document.querySelector("#InputECTS").nextSibling.style.display = "block";
-                
-            } else if (Number.isInteger(parseInt(ECTSInput))) {
-
-                ECTSBool = 2;
-                document.querySelector("#InputECTS").nextSibling.style.display = "none";
-
-            } else {
-
-                ECTSInput = 1;
+                sendCreateRequest();
             }
-            
-        }catch (e) {};
-  
-        
-        if (SubjectBool == 0 && GradeBool == 0 && ECTSBool == 0) {
-    
-            document.removeEventListener("keypress", sendCreateRequest);
-            document.querySelector('#InputRow').parentNode.removeChild(document.querySelector('#InputRow'));
-    
-        } else if ((SubjectBool == 2 && GradeBool == 0 && ECTSBool == 0) || (SubjectBool == 2 && GradeBool == 2 && ECTSBool == 0) ||  (SubjectBool == 2 && GradeBool == 0 && ECTSBool == 2) || (SubjectBool == 2 && GradeBool == 2 && ECTSBool == 2)) {
-
-            document.removeEventListener("keypress", sendCreateRequest);
-            
-            let semester = parseInt(document.querySelector('#InputRow').getAttribute("semester"));
-
-            let newRow = `<tr id="newRow">
-                            <td>`+SubjectInput+`</td>
-                            <td class="grade" >`+GradeInput+`</td>
-                            <td class="ects" >`+ECTSInput+`</td>
-                            <td>
-                                <form method="POST">
-                                    <input type="hidden" name="_token" value="HL0Sf3iD1W0OFvBGxEeuRrHpeo2x1GIjgUAXp4Qx">                                        
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <div class="form-group row mb-0">
-                                        <div>
-                                            <button type="submit" class="btn btn-sm"><i class="fas fa-times color"></i></button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </td>
-                        </tr>`;
-            
-            document.querySelector('#InputRow').insertAdjacentHTML("beforebegin", newRow);
-            document.querySelector('#InputRow').parentNode.removeChild(document.querySelector('#InputRow'));
-
-            let RequestBody = {"semester": semester};
-
-            if (SubjectInput != "") {RequestBody["subject"] = SubjectInput};
-            if (GradeInput != "") {RequestBody["grade"] = parseFloat(GradeInput)};
-            if (ECTSInput != "") {RequestBody["ECTS"] = parseInt(ECTSInput)};
-            
-            $.ajax({
-                url: "/grades",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type:"POST",
-                data: RequestBody,
-        
-                success: function(response) {
-                    
-                    document.querySelector("#newRow").querySelector("form").setAttribute("action", "http://application.test:8000/grades/"+response.id);
-                    document.querySelector("#newRow").removeAttribute("id");
-                }
-            });
-
-            calculateSummary();
         }
+    });
+};
+
+function sendCreateRequest() {
+
+    document.removeEventListener("keypress", awaitEnter);
+        
+    let semester = parseInt(document.querySelector('#InputRow').getAttribute("semester"));
+    let SubjectInput = document.querySelector('#InputSubject').value; 
+    let GradeInput = document.querySelector('#InputGrade').value; 
+    let ECTSInput = document.querySelector('#InputECTS').value; 
+
+    let newRow = `<tr id="newRow">
+                    <td onclick="editSubject()">`+SubjectInput+`</td>
+                    <td class="grade" onclick="editSubject()" >`+GradeInput+`</td>
+                    <td class="ects" onclick="editSubject()" >`+ECTSInput+`</td>
+                    <td>
+                        <form method="POST">
+                            <input type="hidden" name="_token" value="HL0Sf3iD1W0OFvBGxEeuRrHpeo2x1GIjgUAXp4Qx">                                        
+                            <input type="hidden" name="_method" value="DELETE">
+                            <div class="form-group row mb-0">
+                                <div>
+                                    <button type="submit" class="btn btn-sm"><i class="fas fa-times color"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>`;
+    
+    document.querySelector('#InputRow').insertAdjacentHTML("beforebegin", newRow);
+    document.querySelector('#InputRow').parentNode.removeChild(document.querySelector('#InputRow'));
+
+    let RequestBody = {"semester": semester};
+
+    if (SubjectInput != "") {RequestBody["subject"] = SubjectInput};
+    if (GradeInput != "") {RequestBody["grade"] = parseFloat(GradeInput)};
+    if (ECTSInput != "") {RequestBody["ECTS"] = parseInt(ECTSInput)};
+    
+    $.ajax({
+        url: "/grades",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type:"POST",
+        data: RequestBody,
+
+        success: function(response) {
+            
+            document.querySelector("#newRow").querySelector("form").setAttribute("action", "http://application.test:8000/grades/"+response.id);
+            document.querySelector("#newRow").removeAttribute("id");
+        }
+    });
+
+    calculateSummary();
+};
+
+function editSubject() {
+
+    let row = event.target.parentElement;
+    let Subject = row.querySelector("td").innerHTML;
+    let Grade = row.querySelector(".grade").innerHTML;
+    let ECTS = row.querySelector(".ects").innerHTML;
+    let Delete = row.querySelector("input").parentElement.outerHTML;
+    
+    showInput(Subject, Grade, ECTS, row);
+    row.parentNode.removeChild(row);
+
+    document.addEventListener("keypress", awaitEnter = (event) => {
+
+        if (event.keyCode == 13) {
+
+            let response = validateInput();
+
+            if (response == 2) {
+
+                sendEditRequest(Delete);
+            } 
+        }
+    });
+};
+
+function sendEditRequest(Button) {
+
+    document.removeEventListener("keypress", awaitEnter);
+        
+    let SubjectInput = document.querySelector('#InputSubject').value; 
+    let GradeInput = document.querySelector('#InputGrade').value; 
+    let ECTSInput = document.querySelector('#InputECTS').value; 
+
+    let newRow = `<tr id="newRow">
+                    <td onclick="editSubject()">`+SubjectInput+`</td>
+                    <td class="grade" onclick="editSubject()" >`+GradeInput+`</td>
+                    <td class="ects" onclick="editSubject()" >`+ECTSInput+`</td>
+                    <td>`+Button+`</td>
+                </tr>`;
+    
+    document.querySelector('#InputRow').insertAdjacentHTML("beforebegin", newRow);
+    document.querySelector('#InputRow').parentNode.removeChild(document.querySelector('#InputRow'));
+
+    let url = document.querySelector("#newRow form").getAttribute("action");
+    document.querySelector("#newRow").removeAttribute("id");
+
+    let RequestBody = {};
+
+    if (SubjectInput != "") {RequestBody["subject"] = SubjectInput};
+    if (GradeInput != "") {RequestBody["grade"] = parseFloat(GradeInput)};
+    if (ECTSInput != "") {RequestBody["ECTS"] = parseInt(ECTSInput)};
+
+    $.ajax({
+        url: url,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type:"PATCH",
+        data: RequestBody,
+
+        success: function(response) {
+            
+            console.log(response);
+        }
+    });
+
+    calculateSummary();
+};
+
+function validateInput() {
+   
+    let SubjectInput;
+    let SubjectBool = 0;
+    let GradeInput;
+    let GradeBool = 0;
+    let ECTSInput;
+    let ECTSBool = 0;
+
+    try {
+        SubjectInput = document.querySelector('#InputSubject').value; 
+    
+        if (SubjectInput == ""){
+
+            SubjectBool = 0;
+            document.querySelector("#InputSubject").nextSibling.style.display = "block";
+
+        } else {
+
+            SubjectBool = 2;
+            document.querySelector("#InputGrade").nextSibling.style.display = "none";
+        }
+
+    }catch (e) {
+
+        document.querySelector("#InputGrade").nextSibling.style.display = "block";
+    };
+
+    try {
+        GradeInput = document.querySelector('#InputGrade').value; 
+                
+        if (GradeInput == ""){
+        
+            GradeBool = 0;
+
+        } else if (isNaN(GradeInput)) {
+
+            GradeBool = 1;
+            document.querySelector("#InputGrade").nextSibling.style.display = "block";
+
+        } else if (Number.isFloat(parseFloat(GradeInput))) {
+
+            GradeBool = 2;
+            document.querySelector("#InputGrade").nextSibling.style.display = "none";
+
+        } else {
+
+            GradeBool = 1;
+        }
+    
+    }catch (e) {};
+
+    try {
+        ECTSInput = document.querySelector('#InputECTS').value; 
+    
+        if (ECTSInput == ""){
+
+            ECTSBool = 0;
+            
+        } else if (isNaN(ECTSInput)) {
+
+            ECTSBool = 1;
+            document.querySelector("#InputECTS").nextSibling.style.display = "block";
+            
+        } else if (Number.isInteger(parseInt(ECTSInput))) {
+
+            ECTSBool = 2;
+            document.querySelector("#InputECTS").nextSibling.style.display = "none";
+
+        } else {
+
+            ECTSInput = 1;
+        }
+        
+    }catch (e) {};
+
+    
+    if (SubjectBool == 0 && GradeBool == 0 && ECTSBool == 0) {
+
+        return 0;
+
+    } else if ((SubjectBool == 2 && GradeBool == 0 && ECTSBool == 0) || (SubjectBool == 2 && GradeBool == 2 && ECTSBool == 0) ||  (SubjectBool == 2 && GradeBool == 0 && ECTSBool == 2) || (SubjectBool == 2 && GradeBool == 2 && ECTSBool == 2)) {
+
+        return 2;
+
+    } else {
+
+        return 1;
     }
 };

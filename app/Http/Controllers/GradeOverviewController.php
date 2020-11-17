@@ -80,7 +80,7 @@ class GradeOverviewController extends Controller
     {
         $data = $request->validate([
             'semester' => ['numeric', 'required'],
-            'subject' => ['string'],
+            'subject' => ['string', 'required'],
             'grade' => ['numeric'],
             'ECTS' => ['numeric'],
         ]);
@@ -126,7 +126,15 @@ class GradeOverviewController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate([
+            'subject' => ['string', 'required'],
+            'grade' => ['numeric'],
+            'ECTS' => ['numeric'],
+        ]);
+
+        Grade::where('id', $id)->update($data);
+
+        //return response()->json(['id' => $id]);
     }
 
     /**

@@ -35,9 +35,9 @@
                             @foreach ($semester as $Index)
                                 @foreach ($Index as $Fach => $Grades)
                                 <tr>
-                                    <td>{{ $Fach }}</td>
-                                    <td class="grade">{{ $Grades['grade'] }}</td>
-                                    <td class="ects">{{ $Grades['ECTS'] }}</td>
+                                    <td onclick="editSubject()">{{ $Fach }}</td>
+                                    <td class="grade" onclick="editSubject()">{{ $Grades['grade'] }}</td>
+                                    <td class="ects" onclick="editSubject()">{{ $Grades['ECTS'] }}</td>
                                     <td>
                                         <form action="{{ route('grades.destroy', $Grades['id']) }}" method="POST">
                                         @csrf
@@ -66,7 +66,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <button type="button" class="btn btn-primary mt-3" id="{{ $key }}" onclick="showInput()">Neues Fach hinzufügen</button>
+                    <button type="button" class="btn btn-primary mt-3" id="{{ $key }}" onclick="createNewSubject()">Neues Fach hinzufügen</button>
                 </div>
             </div>
         </div>
