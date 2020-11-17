@@ -79,7 +79,7 @@ class GradeOverviewController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'semester' => ['numeric'],
+            'semester' => ['numeric', 'required'],
             'subject' => ['string'],
             'grade' => ['numeric'],
             'ECTS' => ['numeric'],

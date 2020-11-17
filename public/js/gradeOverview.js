@@ -71,9 +71,9 @@ function showInput() {
     let id = event.target.getAttribute("id") + "-s";
 
     let Inputfields = `<tr id="InputRow" semester="`+id+`">
-                            <td><input type="text" class="form-control" id="InputSubject" aria-describedby="Input Fach" placeholder="Fach"></td>
+                            <td><input type="text" class="form-control" id="InputSubject" aria-describedby="Input Fach" placeholder="Fach"><div class="invalid-feedback">Dieses Feld ist erforderlich</div></td>
                             <td><input type="text" class="form-control" id="InputGrade" aria-describedby="Input Note" placeholder="Note"><div class="invalid-feedback">Eingabe muss eine Zahl sein</div></td>
-                            <td><input type="text" class="form-control" id="InputECTS" aria-describedby="Input ECTS" placeholder="ECTS"><div class="invalid-feedback">Eingabe muss eine Zahl sein</div></td>
+                            <td><input type="text" class="form-control" id="InputECTS" aria-describedby="Input ECTS" placeholder="ECTS"><div class="invalid-feedback">Eingabe muss eine ganzzahlige Zahl sein</div></td>
                             <td></td>
                         </tr>`;
 
@@ -107,58 +107,86 @@ function sendCreateRequest(event) {
     if (event.keyCode == 13) {
     
         let SubjectInput;
+        let SubjectBool = 0;
         let GradeInput;
-        let GradeBool = false;
+        let GradeBool = 0;
         let ECTSInput;
-        let ECTSBool = false;
+        let ECTSBool = 0;
     
         try {
             SubjectInput = document.querySelector('#InputSubject').value; 
         
+            if (SubjectInput == ""){
+
+                SubjectBool = 0;
+                document.querySelector("#InputSubject").nextSibling.style.display = "block";
+
+            } else {
+
+                SubjectBool = 2;
+                document.querySelector("#InputGrade").nextSibling.style.display = "none";
+            }
+
         }catch (e) {
-            SubjectInput = ""; 
+
+            document.querySelector("#InputGrade").nextSibling.style.display = "block";
         };
 
         try {
             GradeInput = document.querySelector('#InputGrade').value; 
                    
-            if (isNaN(GradeInput)){
+            if (GradeInput == ""){
+            
+                GradeBool = 0;
 
+            } else if (isNaN(GradeInput)) {
+
+                GradeBool = 1;
                 document.querySelector("#InputGrade").nextSibling.style.display = "block";
+
+            } else if (Number.isFloat(parseFloat(GradeInput))) {
+
+                GradeBool = 2;
+                document.querySelector("#InputGrade").nextSibling.style.display = "none";
 
             } else {
 
-                GradeBool = true;
-                document.querySelector("#InputGrade").nextSibling.style.display = "none";
+                GradeBool = 1;
             }
         
-        }catch (e) {
-            GradeInput = ""; 
-        };
+        }catch (e) {};
 
         try {
             ECTSInput = document.querySelector('#InputECTS').value; 
         
-            if (isNaN(ECTSInput)){
+            if (ECTSInput == ""){
 
+                ECTSBool = 0;
+                
+            } else if (isNaN(ECTSInput)) {
+
+                ECTSBool = 1;
                 document.querySelector("#InputECTS").nextSibling.style.display = "block";
+                
+            } else if (Number.isInteger(parseInt(ECTSInput))) {
+
+                ECTSBool = 2;
+                document.querySelector("#InputECTS").nextSibling.style.display = "none";
+
             } else {
 
-                ECTSBool = true;
-                document.querySelector("#InputECTS").nextSibling.style.display = "none";
+                ECTSInput = 1;
             }
-       
-        }catch (e) {
-            ECTSInput = ""; 
-        };
+            
+        }catch (e) {};
   
         
-        if (SubjectInput == "" && GradeInput == "" && ECTSInput == "") {
+        if (SubjectBool == 0 && GradeBool == 0 && ECTSBool == 0) {
     
             document.removeEventListener("keypress", sendCreateRequest);
             document.querySelector('#InputRow').parentNode.removeChild(document.querySelector('#InputRow'));
     
-        } else if (GradeBool && ECTSBool) {
+        } else if ((SubjectBool == 2 && GradeBool == 0 && ECTSBool == 0) || (SubjectBool == 2 && GradeBool == 2 && ECTSBool == 0) ||  (SubjectBool == 2 && GradeBool == 0 && ECTSBool == 2) || (SubjectBool == 2 && GradeBool == 2 && ECTSBool == 2)) {
 
             document.removeEventListener("keypress", sendCreateRequest);
             
@@ -190,8 +218,6 @@ function sendCreateRequest(event) {
             if (GradeInput != "") {RequestBody["grade"] = parseFloat(GradeInput)};
             if (ECTSInput != "") {RequestBody["ECTS"] = parseInt(ECTSInput)};
             
-            console.log(RequestBody);
-
             $.ajax({
                 url: "/grades",
                 headers: {
