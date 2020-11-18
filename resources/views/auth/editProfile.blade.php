@@ -62,7 +62,7 @@
                             </div>
                         </div>
                     </form>
-                    <form action="{{ route('edit.destroy', $user->id) }}" method="POST" class="mt-4">
+                    <form action="{{ route('edit.destroy', $user->id) }}" method="POST" class="mt-3">
                         @csrf
                         @method('DELETE')
                         <div class="form-group row mb-0">

@@ -8,7 +8,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!--<title>{{ config('app.name', 'Patrick Mäder T4 Abgabe') }}</title>-->
-
     <title>Patrick Mäder T4 Abgabe</title>
 
     <!-- Scripts -->
@@ -42,6 +41,9 @@
                         @else
                         <li class="nav-item">
                             <a class="nav-link font-weight-bold" href="{{ route('calendar.index') }}">{{ __('Kalender') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link font-weight-bold" href="{{ route('grades.index') }}">{{ __('Notenübersicht') }}</a>
                         </li>
                         @endguest
                     </ul>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('css/calendar.css'    ) }}">
+<link rel="stylesheet" href="{{ asset('css/calendar.css') }}">
 <div class="container">
 
     @if(session()->get('success'))

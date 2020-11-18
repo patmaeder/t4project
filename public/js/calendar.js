@@ -10,7 +10,7 @@ $(document).ready(function() {
         }, 4000);
         
     } catch (e) {
-
+        
     }
 
 });
@@ -34,8 +34,6 @@ function AJAXRequest(request) {
         data:{identifier: request},
   
         success: function(response){
-
-            console.log(response);
 
             $("h2").html(response.month);
             
