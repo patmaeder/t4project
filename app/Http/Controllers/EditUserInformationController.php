@@ -74,6 +74,7 @@ class EditUserInformationController extends Controller
     public function destroy($id)
     {
         $Events = DB::delete("delete from homestead.events where userID = '".$id."';");
+        $Events = DB::delete("delete from homestead.grades where userID = '".$id."';");
 
         $user= User::findOrFail($id);
         $user->delete();
