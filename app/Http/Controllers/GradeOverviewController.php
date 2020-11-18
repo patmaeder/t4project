@@ -143,8 +143,6 @@ class GradeOverviewController extends Controller
         ]);
 
         Grade::where('id', $id)->update($data);
-
-        //return response()->json(['id' => $id]);
     }
 
     /**
