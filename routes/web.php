@@ -5,6 +5,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\AJAXController;
 use App\Http\Controllers\EditUserInformationController;
 use App\Http\Controllers\GradeOverviewController;
+use App\Http\Controllers\HomeController;
 
 
 /*
@@ -30,9 +31,7 @@ Route::get('/', function () {
     }
 });
 
-Route::get('/home', function () {
-    return view('home');
-})->middleware('auth');
+Route::get('/home', [HomeController::class, 'index'])->middleware('auth');
 
 Route::resource('calendar', EventController::class)->middleware('auth');
 
