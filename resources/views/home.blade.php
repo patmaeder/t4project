@@ -31,16 +31,11 @@
 <script>
 $(document).ready(function() {
 
-    try {
-
-        let alert = document.querySelector('.alert');
+    if (document.querySelector('.alert') != null) {
 
         setTimeout(() => {
-            alert.style.display = "none";
+            document.querySelector('.alert').style.display = "none";
         }, 4000);
-        
-    } catch (e) {
-
     }
 });
 </script>

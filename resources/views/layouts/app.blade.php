@@ -10,6 +10,10 @@
     <!--<title>{{ config('app.name', 'Patrick Mäder T4 Abgabe') }}</title>-->
     <title>Patrick Mäder T4 Abgabe</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('img/Favicon blau.svg') }}">
+
+
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="https://kit.fontawesome.com/a3183a24f7.js" crossorigin="anonymous"></script>
@@ -60,7 +64,7 @@
                             
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Registrieren') }}</a>
                                 </li>
                             @endif
                         @else
