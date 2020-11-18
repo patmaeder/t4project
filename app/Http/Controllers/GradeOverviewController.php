@@ -24,32 +24,42 @@ class GradeOverviewController extends Controller
         $semester = [];
         $count = 0;
 
-        foreach ($result as $item) {
+        if (count($result) > 0) {
+
+            foreach ($result as $item) {
           
-            $s = 'array'.$item->semester;
+                $s = $item->semester;
+                $Name = 'array'.$item->semester;
 
-            if (isset($$s)) {
+                if (isset($$Name)) {
+    
+                    array_push($$Name, [$item->subject => ['grade' => $item->grade, 'ECTS' => $item->ECTS, 'id' => $item->id]]);
+    
+                } else {
+                        
+                    global $$Name;
+                    $$Name = [];
+                    array_push($$Name, [$item->subject => ['grade' => $item->grade, 'ECTS' => $item->ECTS, 'id' => $item->id]]);
 
-                array_push($$s, [$item->subject => ['grade' => $item->grade, 'ECTS' => $item->ECTS, 'id' => $item->id]]);
-
-
-            } else {
-
-                global $$s;
-                $$s = [];
-                array_push($$s, [$item->subject => ['grade' => $item->grade, 'ECTS' => $item->ECTS, 'id' => $item->id]]);
-                $count++;
-            }
-
-        };
-
-        if ($count != 0) {
+                    if ($s > $count) {
+                        $count = $s;
+                    }
+                }
+            };
 
             for ($i = 1; $i <= $count; $i++) {
             
                 $arrayName = 'array'.$i;
-    
-                $semester[$i] = $$arrayName;
+
+                if (isset($$arrayName)) {
+
+                    $semester[$i] = $$arrayName;
+
+                } else {
+
+                    $$arrayName = [];
+                    $semester[$i] = $$arrayName;
+                }
             }
 
         } else {
@@ -145,6 +155,14 @@ class GradeOverviewController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $grade= Grade::findOrFail($id);
+
+        $user = auth()->user();
+
+        if($grade->userID == $user->id) {
+
+            $grade->delete();
+            return response()->json(["success"]);
+        }
     }
 }

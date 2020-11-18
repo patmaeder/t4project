@@ -4,6 +4,7 @@
 <style>
 .color {
     color: #555;
+    cursor: pointer;
 }
 </style>
 <div class="container">
@@ -34,20 +35,12 @@
 
                             @foreach ($semester as $Index)
                                 @foreach ($Index as $Fach => $Grades)
-                                <tr>
+                                <tr id="{{ $Grades['id'] }}">
                                     <td onclick="editSubject()">{{ $Fach }}</td>
                                     <td class="grade" onclick="editSubject()">{{ $Grades['grade'] }}</td>
                                     <td class="ects" onclick="editSubject()">{{ $Grades['ECTS'] }}</td>
                                     <td>
-                                        <form action="{{ route('grades.destroy', $Grades['id']) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                            <div class="form-group row mb-0">
-                                                <div>
-                                                    <button type="submit" class="btn btn-sm"><i class="fas fa-times color"></i></button>
-                                                </div>
-                                            </div>
-                                        </form>
+                                       <i class="fas fa-times color" onclick="deleteSubject()"></i>
                                     </td>
                                 </tr>
                                 @endforeach

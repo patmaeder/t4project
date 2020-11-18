@@ -170,17 +170,7 @@ function sendCreateRequest() {
                     <td onclick="editSubject()">`+SubjectInput+`</td>
                     <td class="grade" onclick="editSubject()" >`+GradeInput+`</td>
                     <td class="ects" onclick="editSubject()" >`+ECTSInput+`</td>
-                    <td>
-                        <form method="POST">
-                            <input type="hidden" name="_token" value="HL0Sf3iD1W0OFvBGxEeuRrHpeo2x1GIjgUAXp4Qx">                                        
-                            <input type="hidden" name="_method" value="DELETE">
-                            <div class="form-group row mb-0">
-                                <div>
-                                    <button type="submit" class="btn btn-sm"><i class="fas fa-times color"></i></button>
-                                </div>
-                            </div>
-                        </form>
-                    </td>
+                    <td><i class="fas fa-times color" onclick="deleteSubject()"></i></td>
                 </tr>`;
     
     document.querySelector('#InputRow').insertAdjacentHTML("beforebegin", newRow);
@@ -202,8 +192,7 @@ function sendCreateRequest() {
 
         success: function(response) {
             
-            document.querySelector("#newRow").querySelector("form").setAttribute("action", "http://application.test:8000/grades/"+response.id);
-            document.querySelector("#newRow").removeAttribute("id");
+            document.querySelector("#newRow").setAttribute("id", response.id);
         }
     });
 
@@ -213,10 +202,10 @@ function sendCreateRequest() {
 function editSubject() {
 
     let row = event.target.parentElement;
+    let id = row.getAttribute("id");
     let Subject = row.querySelector("td").innerHTML;
     let Grade = row.querySelector(".grade").innerHTML;
     let ECTS = row.querySelector(".ects").innerHTML;
-    let Delete = row.querySelector("input").parentElement.outerHTML;
     
     showInput(Subject, Grade, ECTS, row);
     row.parentNode.removeChild(row);
@@ -229,13 +218,13 @@ function editSubject() {
 
             if (response == 2) {
 
-                sendEditRequest(Delete);
+                sendEditRequest(id);
             } 
         }
     });
 };
 
-function sendEditRequest(Button) {
+function sendEditRequest(id) {
 
     document.removeEventListener("keypress", awaitEnter);
         
@@ -243,18 +232,15 @@ function sendEditRequest(Button) {
     let GradeInput = document.querySelector('#InputGrade').value; 
     let ECTSInput = document.querySelector('#InputECTS').value; 
 
-    let newRow = `<tr id="newRow">
+    let newRow = `<tr id="`+id+`">
                     <td onclick="editSubject()">`+SubjectInput+`</td>
                     <td class="grade" onclick="editSubject()" >`+GradeInput+`</td>
                     <td class="ects" onclick="editSubject()" >`+ECTSInput+`</td>
-                    <td>`+Button+`</td>
+                    <td><i class="fas fa-times color" onclick="deleteSubject()"></i></td>
                 </tr>`;
     
     document.querySelector('#InputRow').insertAdjacentHTML("beforebegin", newRow);
     document.querySelector('#InputRow').parentNode.removeChild(document.querySelector('#InputRow'));
-
-    let url = document.querySelector("#newRow form").getAttribute("action");
-    document.querySelector("#newRow").removeAttribute("id");
 
     let RequestBody = {};
 
@@ -263,21 +249,42 @@ function sendEditRequest(Button) {
     if (ECTSInput != "") {RequestBody["ECTS"] = parseInt(ECTSInput)};
 
     $.ajax({
-        url: url,
+        url: "http://application.test:8000/grades/"+id,
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         type:"PATCH",
         data: RequestBody,
 
-        success: function(response) {
-            
-            console.log(response);
-        }
+        success: function(response) {}
     });
 
     calculateSummary();
 };
+
+function deleteSubject() {
+
+    event.preventDefault();
+   
+    let row = event.target.parentElement.parentElement;
+
+    let id = row.getAttribute("id");
+
+    row.parentNode.removeChild(row);
+
+    $.ajax({
+        url: "http://application.test:8000/grades/"+id,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type:"DELETE",
+        data: {},
+
+        success: function(response) {}
+    });
+
+    calculateSummary();
+}
 
 function validateInput() {
    
@@ -299,12 +306,12 @@ function validateInput() {
         } else {
 
             SubjectBool = 2;
-            document.querySelector("#InputGrade").nextSibling.style.display = "none";
+            document.querySelector("#InputSubject").nextSibling.style.display = "none";
         }
 
     }catch (e) {
 
-        document.querySelector("#InputGrade").nextSibling.style.display = "block";
+        document.querySelector("#InputSubject").nextSibling.style.display = "block";
     };
 
     try {
@@ -313,6 +320,7 @@ function validateInput() {
         if (GradeInput == ""){
         
             GradeBool = 0;
+            document.querySelector("#InputGrade").nextSibling.style.display = "none";
 
         } else if (isNaN(GradeInput)) {
 
@@ -337,6 +345,7 @@ function validateInput() {
         if (ECTSInput == ""){
 
             ECTSBool = 0;
+            document.querySelector("#InputECTS").nextSibling.style.display = "none";
             
         } else if (isNaN(ECTSInput)) {
 
