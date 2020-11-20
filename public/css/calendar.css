@@ -38,4 +38,5 @@ th p {
     line-height: normal;
     margin: 2px;
     color: #fff;
+    word-break: break-word;
 }

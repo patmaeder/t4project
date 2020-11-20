@@ -32,6 +32,8 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [HomeController::class, 'index'])->middleware('auth');
+Route::patch('/home', [HomeController::class, 'update'])->middleware('auth');
+
 
 Route::resource('calendar', EventController::class)->middleware('auth');
 

@@ -15,12 +15,12 @@
             <div class="card" style="height: 80vh">
                 <div class="card-header"><a href="{{ url('/calendar') }}">{{ __('Anstehende Termine') }}</a></div>
 
-                <div class="card-body">
+                <div class="card-body" style="overflow-x: hidden; overflow-y: auto">
 
                     @foreach ($events as $item)
-                    <div class="mb-4" style="padding: 1.25em; background-color: #eee; border-radius: 10px" >
+                    <div class="mb-4 border-bottom" style="padding: 1.25em" >
                         <h5 class="mb-3">{{ $item->date }}</h5>
-                        <h2>{{ $item->title }}</h2>
+                        <h3>{{ $item->title }}</h3>
                         <p class="mb-0">{{ $item->description }}</p> 
                     </div>
                     @endforeach
@@ -51,7 +51,7 @@
                         <div class="card-header"><a href="#">{{ __('Notizen') }}</a></div>
 
                         <div class="card-body">
-                            <textarea name="notizen" class="border-0" style="width: 100%; resize: none"></textarea>
+                            <textarea name="notizen" class="border-0" style="width: 100%; resize: none">{{ $notes['0']->notes }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -70,11 +70,6 @@ $(document).ready(function() {
     }
 
     resizeTextfield();
-
-    if (localStorage.getItem("note") != null) {
-        let note = localStorage.getItem("note");
-        document.querySelector("textarea").value = note;
-    }
 });
 
 window.addEventListener("resize", resizeTextfield());
@@ -90,7 +85,20 @@ function resizeTextfield() {
 $("textarea").on("change keyup paste", function(){
     
     let note = document.querySelector("textarea").value;
-    localStorage.setItem('note', note);
+    
+    let RequestBody = {};
+    RequestBody["notes"] = note;
+
+    $.ajax({
+        url: "http://application.test:8000/home",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type:"PATCH",
+        data: RequestBody,
+
+        success: function(response) {}
+    });
 });
 </script>
 @endsection

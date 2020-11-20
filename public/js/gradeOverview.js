@@ -14,16 +14,18 @@ function calculateSummary() {
         let grades = table.querySelectorAll(".grade");
 
         let avg = 0;
+        let count = 0;
 
         for (var i = 0; i < grades.length; i++) {
             
             if (grades[i].innerHTML != "") {
 
                 avg = avg + parseFloat(grades[i].innerHTML);
+                count = count +1;
             }
         }
 
-        avg = (avg/grades.length).toFixed(2);
+        avg = (avg/count).toFixed(2);
         table.querySelector("#avg").innerHTML = "<b>&Oslash; "+avg+"</b>";
 
         let ects = table.querySelectorAll(".ects");
@@ -55,7 +57,7 @@ function createNewSemester() {
     let template = `<div class="card">
                         <div class="card-header" id="heading`+id+`">
                             <h2 class="mb-0">
-                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse`+id+`" aria-expanded="true" aria-controls="collapse`+id+`" onclick="hideInput()">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse`+id+`" aria-expanded="true" aria-controls="collapse`+id+`" >
                                 `+id+`. Semester
                                 </button>
                             </h2>
@@ -111,23 +113,19 @@ function showInput(ph_Subject, ph_Grade, ph_ECTS, InserElement) {
 
     if(Input == null) {
                 
+        $('[data-toggle=collapse]').prop('disabled',true);
+
         InserElement.insertAdjacentHTML("beforebegin", Inputfields);
 
         document.querySelector("#InputSubject").focus();
         document.querySelector("#InputSubject").select();
+
+        return true;
+
+    } else {
+
+        return false;
     }
-}
-
-function hideInput() {
-
-    try {
-
-        document.querySelector('#InputRow').parentNode.removeChild(document.querySelector('#InputRow'));
-
-    } catch (e) {
-        //catch if no Input is shown
-    };
-
 }
 
 function removeEevntListener() { document.removeEventListener("keypress", awaitEnter);};
@@ -136,25 +134,33 @@ function createNewSubject() {
 
     let element = event.target.parentNode.querySelector(".divider");
 
-    showInput("", "", "", element);
+    let response = showInput("", "", "", element);
     
-    document.addEventListener("keypress", awaitEnter = (event) => {
+    if (response) {
 
-        if (event.keyCode == 13) {
+        document.addEventListener("keypress", awaitEnter = (event) => {
 
-            let response = validateInput();
+            if (event.keyCode == 13) {
+    
+                let response = validateInput();
+    
+                if (response == 0) {
+    
+                    removeEevntListener();
+                    document.querySelector('#InputRow').parentNode.removeChild(document.querySelector('#InputRow'));
 
-            if (response == 0) {
+                    $('[data-toggle=collapse]').prop('disabled',false);
+    
+                } else if (response == 2) {
+                    
+                    sendCreateRequest();
 
-                removeEevntListener();
-                document.querySelector('#InputRow').parentNode.removeChild(document.querySelector('#InputRow'));
-
-            } else if (response == 2) {
-                
-                sendCreateRequest();
+                    $('[data-toggle=collapse]').prop('disabled',false);
+                }
             }
-        }
-    });
+        })
+
+    }
 };
 
 function sendCreateRequest() {
@@ -207,21 +213,26 @@ function editSubject() {
     let Grade = row.querySelector(".grade").innerHTML;
     let ECTS = row.querySelector(".ects").innerHTML;
     
-    showInput(Subject, Grade, ECTS, row);
-    row.parentNode.removeChild(row);
+    let response = showInput(Subject, Grade, ECTS, row);
+    
+    if (response) {
+      
+        row.parentNode.removeChild(row);
 
-    document.addEventListener("keypress", awaitEnter = (event) => {
-
-        if (event.keyCode == 13) {
-
-            let response = validateInput();
-
-            if (response == 2) {
-
-                sendEditRequest(id);
-            } 
-        }
-    });
+        document.addEventListener("keypress", awaitEnter = (event) => {
+    
+            if (event.keyCode == 13) {
+    
+                let response = validateInput();
+    
+                if (response == 2) {
+    
+                    sendEditRequest(id);
+                    $('[data-toggle=collapse]').prop('disabled',false);
+                } 
+            }
+        });
+    }
 };
 
 function sendEditRequest(id) {

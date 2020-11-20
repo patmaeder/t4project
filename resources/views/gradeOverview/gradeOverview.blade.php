@@ -14,7 +14,7 @@
         <div class="card">
             <div class="card-header" id="heading{{ $key }}">
                 <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse{{ $key }}" aria-expanded="true" aria-controls="collapse{{ $key }}" onclick="hideInput()">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse{{ $key }}" aria-expanded="true" aria-controls="collapse{{ $key }}" >
                     {{ $key }}. Semester
                     </button>
                 </h2>
